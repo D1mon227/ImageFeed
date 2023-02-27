@@ -12,7 +12,7 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var likeButton: UIButton!
-    @IBOutlet var gradientImageView: UIImageView!
+    @IBOutlet private var gradientImageView: UIImageView!
     
     static let reuseIdentifier = "ImagesListCell"
 
