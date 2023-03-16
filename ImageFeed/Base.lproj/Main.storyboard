@@ -43,7 +43,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="27 августа 2022" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jiA-WR-GXj" userLabel="Date Label">
-                                                    <rect key="frame" x="24" y="196" width="101.5" height="16"/>
+                                                    <rect key="frame" x="24" y="196" width="97" height="16"/>
                                                     <fontDescription key="fontDescription" name="SFPro-Regular" family="SF Pro" pointSize="13"/>
                                                     <color key="textColor" name="YP White (iOS)"/>
                                                     <nil key="highlightedColor"/>
@@ -165,16 +165,14 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Hu3-Di-4Ut" userLabel="Image View">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="132"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Hu3-Di-4Ut" secondAttribute="bottom" id="BnN-kI-yd6"/>
-                                    <constraint firstAttribute="trailing" secondItem="Hu3-Di-4Ut" secondAttribute="trailing" id="D5D-3J-F3V"/>
-                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="leading" secondItem="VK4-P8-kYP" secondAttribute="leading" id="FXK-BJ-gbv"/>
-                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="width" secondItem="mQw-ea-cuV" secondAttribute="width" id="Ojx-4z-QQb"/>
-                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="height" secondItem="mQw-ea-cuV" secondAttribute="height" id="ifc-AP-tRz"/>
-                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="top" secondItem="VK4-P8-kYP" secondAttribute="top" id="yGj-Gj-QVb"/>
+                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="bottom" secondItem="2sv-ld-lrQ" secondAttribute="bottom" id="H01-0h-sbg"/>
+                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="top" secondItem="2sv-ld-lrQ" secondAttribute="top" id="XBE-yu-rLJ"/>
+                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="trailing" secondItem="2sv-ld-lrQ" secondAttribute="trailing" id="cPD-22-v0x"/>
+                                    <constraint firstItem="Hu3-Di-4Ut" firstAttribute="leading" secondItem="2sv-ld-lrQ" secondAttribute="leading" id="yNl-T3-fLq"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="2sv-ld-lrQ"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="mQw-ea-cuV"/>
@@ -183,7 +181,7 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rf0-T6-9C0" userLabel="TapBackButton">
-                                <rect key="frame" x="39" y="59" width="9" height="15.5"/>
+                                <rect key="frame" x="39" y="60" width="9" height="15.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="8.9700000000000006" id="5in-F7-Tw1"/>
                                     <constraint firstAttribute="height" constant="15.59" id="kUB-pJ-n4f"/>
@@ -195,7 +193,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x5r-FD-FuY" userLabel="TapShareButton">
-                                <rect key="frame" x="182" y="795" width="50" height="50"/>
+                                <rect key="frame" x="182" y="776" width="50" height="50"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="Sharing"/>
                                 <connections>
@@ -207,10 +205,10 @@
                         <color key="backgroundColor" name="YP Black (iOS)"/>
                         <constraints>
                             <constraint firstItem="VK4-P8-kYP" firstAttribute="leading" secondItem="udV-Wk-362" secondAttribute="leading" id="HBZ-cD-T4C"/>
-                            <constraint firstAttribute="bottom" secondItem="x5r-FD-FuY" secondAttribute="bottom" constant="51" id="TrH-bP-TNR"/>
+                            <constraint firstItem="udV-Wk-362" firstAttribute="bottom" secondItem="x5r-FD-FuY" secondAttribute="bottom" constant="36" id="TrH-bP-TNR"/>
                             <constraint firstItem="udV-Wk-362" firstAttribute="trailing" secondItem="VK4-P8-kYP" secondAttribute="trailing" id="Wbp-ZD-y6u"/>
                             <constraint firstAttribute="bottom" secondItem="VK4-P8-kYP" secondAttribute="bottom" id="apa-ba-j45"/>
-                            <constraint firstItem="Rf0-T6-9C0" firstAttribute="top" secondItem="IRn-YM-Pio" secondAttribute="top" constant="59" id="gB7-8W-ssf"/>
+                            <constraint firstItem="Rf0-T6-9C0" firstAttribute="top" secondItem="IRn-YM-Pio" secondAttribute="top" constant="60" id="gB7-8W-ssf"/>
                             <constraint firstItem="Rf0-T6-9C0" firstAttribute="leading" secondItem="IRn-YM-Pio" secondAttribute="leading" constant="39" id="o2q-oN-5ic"/>
                             <constraint firstItem="VK4-P8-kYP" firstAttribute="top" secondItem="IRn-YM-Pio" secondAttribute="top" id="sWh-tF-DGr"/>
                             <constraint firstItem="x5r-FD-FuY" firstAttribute="centerX" secondItem="IRn-YM-Pio" secondAttribute="centerX" id="zFb-0X-Bv8"/>
