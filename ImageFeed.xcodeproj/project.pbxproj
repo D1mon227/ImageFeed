@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		731EADDD29BF28C700081FC8 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731EADDC29BF28C700081FC8 /* SingleImageViewController.swift */; };
 		731F74A229A4F32000E7CCE7 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 731F74A129A4F32000E7CCE7 /* ImagesListCell.swift */; };
+		732A03F329B0F5B000F10C28 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 732A03F229B0F5B000F10C28 /* ProfileViewController.swift */; };
 		73CA559929A6275700C5C348 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CA559829A6275700C5C348 /* Date+Extensions.swift */; };
 		73CA559B29A627B200C5C348 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CA559A29A627B200C5C348 /* UIColor+Extensions.swift */; };
 		73DB4E35299FA85B0023E362 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DB4E34299FA85B0023E362 /* AppDelegate.swift */; };
@@ -19,8 +21,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		731EADDC29BF28C700081FC8 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		731F74A129A4F32000E7CCE7 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		731F74A529A5147C00E7CCE7 /* SF-Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro.ttf"; sourceTree = "<group>"; };
+		732A03F229B0F5B000F10C28 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		73CA559829A6275700C5C348 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		73CA559A29A627B200C5C348 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		73DB4E31299FA85B0023E362 /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +55,22 @@
 				73DB4E38299FA85B0023E362 /* ImagesListViewController.swift */,
 			);
 			path = ImagesList;
+			sourceTree = "<group>";
+		};
+		7328E34E29BF4438001EF27A /* SingleImageView */ = {
+			isa = PBXGroup;
+			children = (
+				731EADDC29BF28C700081FC8 /* SingleImageViewController.swift */,
+			);
+			path = SingleImageView;
+			sourceTree = "<group>";
+		};
+		7346B6E429B101EC0099F146 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				732A03F229B0F5B000F10C28 /* ProfileViewController.swift */,
+			);
+			path = Profile;
 			sourceTree = "<group>";
 		};
 		73CA559729A6272B00C5C348 /* Helpers */ = {
@@ -91,7 +111,9 @@
 			children = (
 				73DB4E34299FA85B0023E362 /* AppDelegate.swift */,
 				73DB4E36299FA85B0023E362 /* SceneDelegate.swift */,
+				7346B6E429B101EC0099F146 /* Profile */,
 				731F74A329A4F34800E7CCE7 /* ImagesList */,
+				7328E34E29BF4438001EF27A /* SingleImageView */,
 				73CA559729A6272B00C5C348 /* Helpers */,
 				73CA559C29A633E500C5C348 /* Fonts */,
 				73DB4E3A299FA85B0023E362 /* Main.storyboard */,
@@ -177,7 +199,9 @@
 				73CA559B29A627B200C5C348 /* UIColor+Extensions.swift in Sources */,
 				731F74A229A4F32000E7CCE7 /* ImagesListCell.swift in Sources */,
 				73DB4E35299FA85B0023E362 /* AppDelegate.swift in Sources */,
+				732A03F329B0F5B000F10C28 /* ProfileViewController.swift in Sources */,
 				73CA559929A6275700C5C348 /* Date+Extensions.swift in Sources */,
+				731EADDD29BF28C700081FC8 /* SingleImageViewController.swift in Sources */,
 				73DB4E37299FA85B0023E362 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
