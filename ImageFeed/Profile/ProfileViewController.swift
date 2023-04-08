@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import Kingfisher
+import SwiftKeychainWrapper
 
 final class ProfileViewController: UIViewController {
+    
+    private let token = OAuth2TokenStorage.Keys.bearerToken.rawValue
+    
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private var profileInfoServiceObserver: NSObjectProtocol?
+    
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     private let avatarImage = UIImageView()
     private let nameLabel = UILabel()
@@ -17,16 +27,59 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        
         getAccountImage()
         getUserName()
         getLoginName()
         getDescription()
         getLogoutButton()
         
+        profileInfoObserver()
+        profileImageObserver()
+    }
+    
+    private func updateAvatar() {
+        guard let profileImageURL = profileImageService.avatarURL,
+              let url = URL(string: profileImageURL) else { return }
+        avatarImage.kf.setImage(with: url)
+    }
+    
+    private func profileImageObserver() {
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+    }
+    
+    //papwy5-xafreg-pYvpam
+    
+    private func profileInfoObserver() {
+        profileInfoServiceObserver = NotificationCenter.default.addObserver(
+            forName: SplashViewController.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateProfileDetails(profile: self.profileService.profile)
+            }
+        updateProfileDetails(profile: profileService.profile)
+    }
+    
+    private func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
+        self.nameLabel.text = profile.name
+        self.loginNameLabel.text = profile.loginName
+        self.descriptionLabel.text = profile.bio
     }
     
     private func getAccountImage() {
         avatarImage.image = UIImage(named: "avatar_icon")
+        avatarImage.layer.cornerRadius = 35
+        avatarImage.layer.masksToBounds = true
         
         avatarImage.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImage)
@@ -70,6 +123,11 @@ final class ProfileViewController: UIViewController {
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logoutButton)
         setLogoutButton(button: logoutButton)
+        logoutButton.addTarget(self, action: #selector(deleteKey), for: .touchUpInside)
+    }
+    
+    @objc private func deleteKey() {
+        KeychainWrapper.standard.removeObject(forKey: token)
     }
     
     private func setImageConstraints(image: UIImageView) {

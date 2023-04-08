@@ -1,0 +1,28 @@
+//
+//  UserResult.swift
+//  ImageFeed
+//
+//  Created by Dmitry Medvedev on 04.04.2023.
+//
+
+import Foundation
+
+struct UserResult: Codable {
+    let profile_image: ImageSizes
+    
+    private enum CodingKeys: String, CodingKey {
+        case profile_image = "profile_image"
+    }
+}
+
+struct ImageSizes: Codable {
+    let small: String
+    let medium: String
+    let large: String
+
+    private enum CodingKeys: String, CodingKey {
+        case small = "small"
+        case medium = "medium"
+        case large = "large"
+    }
+}
