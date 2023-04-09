@@ -9,10 +9,8 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     
-    private let webViewSegueIdentifier = "ShowWebView"
-    
     private let authImage = UIImageView()
-    private let sighInButton = UIButton()
+    private let sighInButton = UIButton(type: .system)
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -58,36 +56,29 @@ final class AuthViewController: UIViewController {
     }
     
     @objc private func moveToWebView() {
-//        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration")}
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let webViewController = storyboard.instantiateViewController(withIdentifier: "WebViewController")
-//        window.rootViewController = webViewController
-        webViewController.modalPresentationStyle = .fullScreen
+        let webViewController = WebViewViewController()
+        webViewController.modalPresentationStyle = .overFullScreen
+        webViewController.delegate = self
         present(webViewController, animated: true)
-        
-//        let webViewController = WebViewViewController()
-//        webViewController.modalPresentationStyle = .fullScreen
-//        present(webViewController, animated: true)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == webViewSegueIdentifier {
-            guard let webViewController = segue.destination as? WebViewViewController else {
-                fatalError("Failed to prepare for \(webViewSegueIdentifier)") }
-            webViewController.delegate = self
-        } else {
-            super.prepare(for: segue, sender: sender)
-        }
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == webViewSegueIdentifier {
+//            guard let webViewController = segue.destination as? WebViewViewController else {
+//                fatalError("Failed to prepare for \(webViewSegueIdentifier)") }
+//            webViewController.delegate = self
+//        } else {
+//            super.prepare(for: segue, sender: sender)
+//        }
+//    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
-    func webViewViewController(_vc: WebViewViewController, didAuthenticateWithCode code: String) {
+    func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     
-    func webViewViewControllerDidCancel(_vc: WebViewViewController) {
+    func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
     }
 }
