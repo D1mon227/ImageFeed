@@ -6,35 +6,107 @@
 //
 
 import UIKit
+import SnapKit
+import SwiftUI
 
 final class SingleImageViewController: UIViewController {
+    
+    private lazy var backButton: UIButton = {
+        let element = UIButton(type: .custom)
+        element.setImage(UIImage(named: "chevron.backward"), for: .normal)
+        element.addTarget(self, action: #selector(backToFeed), for: .touchUpInside)
+        return element
+    }()
+
+    private lazy var shareButton: UIButton = {
+        let element = UIButton(type: .custom)
+        element.setImage(UIImage(named: "Sharing"), for: .normal)
+        element.addTarget(self, action: #selector(share), for: .touchUpInside)
+        return element
+    }()
+
+    private lazy var scrollView: UIScrollView = {
+        let element = UIScrollView()
+        return element
+    }()
+
+    private lazy var singleImageView: UIImageView = {
+        let element = UIImageView()
+        return element
+    }()
     
     var image: UIImage! {
         didSet {
             guard isViewLoaded else { return }
-            imageView.image = image
+            singleImageView.image = image
             rescaleAndCenterImageInScrollView(image: image)
         }
     }
     
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet private var scrollView: UIScrollView!
+    private func addViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(singleImageView)
+        view.addSubview(backButton)
+        view.addSubview(shareButton)
+    }
+
+    private func addConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        singleImageView.snp.makeConstraints { make in
+            make.top.equalTo(scrollView.contentLayoutGuide.snp.top)
+            make.bottom.equalTo(scrollView.contentLayoutGuide.snp.bottom)
+            make.leading.equalTo(scrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(scrollView.contentLayoutGuide.snp.trailing)
+        }
+        
+        backButton.snp.makeConstraints { make in
+            make.width.height.equalTo(24)
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(9)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(9)
+        }
+        
+        shareButton.snp.makeConstraints { make in
+            make.centerX.equalTo(view.snp.centerX)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(36)
+        }
+    }
     
-    @IBAction private func didTapShareButton() {
+    @objc private func share() {
         guard let shareImage = image else { return }
         let shareController = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
         present(shareController, animated: true)
     }
     
-    @IBAction private func didTapBackButton() {
+    @objc private func backToFeed() {
         dismiss(animated: true, completion: nil)
     }
     
+//    @IBOutlet private var imageView: UIImageView!
+//    @IBOutlet private var scrollView: UIScrollView!
+    
+//    @IBAction private func didTapShareButton() {
+//        guard let shareImage = image else { return }
+//        let shareController = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
+//        present(shareController, animated: true)
+//    }
+    
+//    @IBAction private func didTapBackButton() {
+//        dismiss(animated: true, completion: nil)
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image)
+        view.backgroundColor = .ypBlack
+        addViews()
+        addConstraints()
         
+        singleImageView.image = image
+        rescaleAndCenterImageInScrollView(image: image)
+        scrollView.delegate = self
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }
@@ -59,6 +131,25 @@ final class SingleImageViewController: UIViewController {
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        imageView
+        singleImageView
+    }
+}
+
+struct ContentViewController: UIViewControllerRepresentable {
+
+    typealias UIViewControllerType = SingleImageViewController
+
+    func makeUIViewController(context: Context) -> UIViewControllerType {
+        return SingleImageViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: SingleImageViewController, context: Context) {}
+}
+
+struct ContentViewController_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentViewController()
+            .edgesIgnoringSafeArea(.all)
+            .colorScheme(.light) // or .dark
     }
 }
