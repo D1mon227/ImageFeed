@@ -68,13 +68,13 @@ extension URLSession {
                             let json = try decoder.decode(T.self, from: data)
                             fulfillCompletion(.success(json))
                         } catch {
-                            fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
+                            fulfillCompletion(.failure(error))
                         }
-                    } else if let error = error {
-                        fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
                     } else {
-                        fulfillCompletion(.failure(NetworkError.urlSessionError))
+                        fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                     }
+                } else if let error = error {
+                    fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
                 }
             })
             return task

@@ -42,6 +42,8 @@ final class SplashViewController: UIViewController {
                 switchToAuthController()
                 isFirst = false
             }
+        } else {
+            switchToTabBarController()
         }
     }
     
@@ -73,18 +75,18 @@ final class SplashViewController: UIViewController {
     }
     
     private func fetchProfile(token: String) {
-        profileService.fetchProfile(token) { [weak self] result in
+        self.profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                username = profile.username
+                self.username = profile.username
                 UIBlockingProgressHUD.dismiss()
-                fetchImageProfile(token: token)
+                self.fetchImageProfile(token: token)
                 self.switchToTabBarController()
                 NotificationCenter.default.post(
                     name: SplashViewController.didChangeNotification,
                     object: self,
-                    userInfo: ["ProfileInfo": self.profileService.profile!])
+                    userInfo: ["ProfileInfo": profile])
             case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
                 self.showAlert()
@@ -98,11 +100,11 @@ final class SplashViewController: UIViewController {
             profileImageService.fetchProfileImageURL(token: token, username: username) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
-                case.success(_):
+                case.success(let avatarURL):
                     NotificationCenter.default.post(
                         name: ProfileImageService.didChangeNotification,
                         object: self,
-                        userInfo: ["URL": self.profileImageService.avatarURL!])
+                        userInfo: ["URL": avatarURL])
                 case.failure(let error):
                     self.showAlert()
                     print(error)

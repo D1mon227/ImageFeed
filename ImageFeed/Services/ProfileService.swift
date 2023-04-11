@@ -30,10 +30,11 @@ final class ProfileService {
             guard let self = self else { return }
             switch result {
             case .success(let unsplashProfile):
+                let bio = unsplashProfile.bio ?? ""
                 self.profile = Profile(username: unsplashProfile.username,
                                        first_name: unsplashProfile.first_name,
                                        last_name: unsplashProfile.last_name,
-                                       bio: unsplashProfile.bio)
+                                       bio: bio)
                 UIBlockingProgressHUD.dismiss()
                 completion(.success(self.profile!))
             case .failure(let error):

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserResult: Codable {
+struct ProfileImage: Codable {
     let profile_image: ImageSizes
     
     private enum CodingKeys: String, CodingKey {
