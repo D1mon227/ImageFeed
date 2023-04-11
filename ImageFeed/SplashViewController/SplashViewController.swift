@@ -14,6 +14,7 @@ final class SplashViewController: UIViewController {
     static let didChangeNotification = Notification.Name("ProfileInfoDidRecieve")
     
     private var isFirst = true
+    private var username: String?
     private let imageListViewController = ImagesListViewController()
     private let oAuthService = OAuth2Service()
     private let profileService = ProfileService.shared
@@ -32,7 +33,7 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if isFirst == true {
+        if isFirst {
             if let token = OAuth2TokenStorage().token {
                 fetchProfile(token: token)
                 fetchImageProfile(token: token)
@@ -42,13 +43,6 @@ final class SplashViewController: UIViewController {
                 isFirst = false
             }
         }
-//        if let token = OAuth2TokenStorage().token {
-//            fetchProfile(token: token)
-//            fetchImageProfile(token: token)
-//            switchToTabBarController()
-//        } else {
-//            switchToAuthController()
-//        }
     }
     
     private func switchToAuthController() {
@@ -82,8 +76,10 @@ final class SplashViewController: UIViewController {
         profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
-            case .success:
+            case .success(let profile):
+                username = profile.username
                 UIBlockingProgressHUD.dismiss()
+                fetchImageProfile(token: token)
                 self.switchToTabBarController()
                 NotificationCenter.default.post(
                     name: SplashViewController.didChangeNotification,
@@ -98,28 +94,32 @@ final class SplashViewController: UIViewController {
     }
     
     private func fetchImageProfile(token: String) {
-        profileImageService.fetchProfileImageURL(token: token, username: "d1mon227") { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case.success(_):
-                NotificationCenter.default.post(
-                    name: ProfileImageService.didChangeNotification,
-                    object: self,
-                    userInfo: ["URL": self.profileImageService.avatarURL!])
-            case.failure(let error):
-                self.showAlert()
-                print(error)
+        if let username = username {
+            profileImageService.fetchProfileImageURL(token: token, username: username) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case.success(_):
+                    NotificationCenter.default.post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL": self.profileImageService.avatarURL!])
+                case.failure(let error):
+                    self.showAlert()
+                    print(error)
+                }
             }
         }
     }
     
-    private func showAlert() {
+    func showAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ок", style: .default)
+        let action = UIAlertAction(title: "Ок", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
         alert.addAction(action)
-        self.present(self, animated: true)
+        self.present(alert, animated: true)
     }
     
     private func setupSplashView() {

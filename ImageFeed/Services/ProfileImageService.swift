@@ -13,7 +13,6 @@ final class ProfileImageService {
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
     private let urlSession = URLSession.shared
-//    private var task: URLSessionTask?
     private(set) var avatarURL: String?
     
     func fetchProfileImageURL(token: String, username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
@@ -32,7 +31,6 @@ final class ProfileImageService {
                 completion(.failure(error))
             }
         }
-        //self.task = task
         task.resume()
     }
 }

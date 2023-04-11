@@ -109,6 +109,14 @@
 			path = SingleImageView;
 			sourceTree = "<group>";
 		};
+		733C006B29E4B5A7002D86B9 /* TabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				7374C47529E04EF9008DC71A /* TabBarController.swift */,
+			);
+			path = TabBarController;
+			sourceTree = "<group>";
+		};
 		7341189829D0B6B1003C76CD /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,8 +194,8 @@
 				73E4D6B029CB1D1500E27896 /* Models */,
 				73E4D6B329CB1F4000E27896 /* Services */,
 				7346B6E429B101EC0099F146 /* Profile */,
-				7374C47529E04EF9008DC71A /* TabBarController.swift */,
 				7341189A29D0B740003C76CD /* SplashViewController */,
+				733C006B29E4B5A7002D86B9 /* TabBarController */,
 				731F74A329A4F34800E7CCE7 /* ImagesList */,
 				7328E34E29BF4438001EF27A /* SingleImageView */,
 				73CA559729A6272B00C5C348 /* Helpers */,

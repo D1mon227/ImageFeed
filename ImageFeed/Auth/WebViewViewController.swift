@@ -16,14 +16,12 @@ final class WebViewViewController: UIViewController {
     
     private lazy var webView: WKWebView = {
         let element = WKWebView()
-        view.addSubview(webView)
         element.backgroundColor = .ypWhite
         return element
     }()
     
     private lazy var backButton: UIButton = {
         let element = UIButton(type: .system)
-        view.addSubview(backButton)
         element.setImage(UIImage(named: "nav_back_button"), for: .normal)
         element.tintColor = .ypBlack
         element.addTarget(self, action: #selector(backButtonAction), for: .touchUpInside)
@@ -32,7 +30,6 @@ final class WebViewViewController: UIViewController {
     
     private lazy var progressView: UIProgressView = {
         let element = UIProgressView()
-        view.addSubview(progressView)
         element.progressTintColor = .ypBlack
         return element
     }()
@@ -40,7 +37,8 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
-        //addConstraints()
+        addViews()
+        addConstraints()
         webView.navigationDelegate = self
         requestToUnsplash()
         
@@ -51,6 +49,12 @@ final class WebViewViewController: UIViewController {
                  guard let self = self else { return }
                  self.updateProgress()
              })
+    }
+    
+    private func addViews() {
+        view.addSubview(webView)
+        view.addSubview(backButton)
+        view.addSubview(progressView)
     }
     
     override func viewDidAppear(_ animated: Bool) {

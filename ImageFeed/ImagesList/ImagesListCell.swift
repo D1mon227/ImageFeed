@@ -35,13 +35,6 @@ final class ImagesListCell: UITableViewCell {
         let element = UIImageView()
         return element
     }()
-    
-//    @IBOutlet var cellImage: UIImageView!
-//    @IBOutlet var dateLabel: UILabel!
-//    @IBOutlet var likeButton: UIButton!
-//    @IBOutlet private var gradientImageView: UIImageView!
-    
-    //static let reuseIdentifier = "ImagesListCell"
 
     override func layoutSubviews() {
         gradientImageView.layer.sublayers = nil

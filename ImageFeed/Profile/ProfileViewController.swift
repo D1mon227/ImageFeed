@@ -72,7 +72,7 @@ final class ProfileViewController: UIViewController {
     private func updateAvatar() {
         guard let profileImageURL = profileImageService.avatarURL,
               let url = URL(string: profileImageURL) else { return }
-        avatarImage.kf.setImage(with: url)
+        avatarImage.kf.setImage(with: url, placeholder: UIImage(named: "avatarPlaceHolder"))
     }
     
     private func profileImageObserver() {
@@ -85,8 +85,6 @@ final class ProfileViewController: UIViewController {
             }
         updateAvatar()
     }
-    
-    //papwy5-xafreg-pYvpam
     
     private func profileInfoObserver() {
         profileInfoServiceObserver = NotificationCenter.default.addObserver(

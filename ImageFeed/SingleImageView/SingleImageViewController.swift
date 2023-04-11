@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import SwiftUI
 
 final class SingleImageViewController: UIViewController {
     
@@ -52,8 +51,7 @@ final class SingleImageViewController: UIViewController {
 
     private func addConstraints() {
         scrollView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.top.bottom.leading.trailing.equalToSuperview()
         }
         
         singleImageView.snp.makeConstraints { make in
@@ -84,19 +82,6 @@ final class SingleImageViewController: UIViewController {
     @objc private func backToFeed() {
         dismiss(animated: true, completion: nil)
     }
-    
-//    @IBOutlet private var imageView: UIImageView!
-//    @IBOutlet private var scrollView: UIScrollView!
-    
-//    @IBAction private func didTapShareButton() {
-//        guard let shareImage = image else { return }
-//        let shareController = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
-//        present(shareController, animated: true)
-//    }
-    
-//    @IBAction private func didTapBackButton() {
-//        dismiss(animated: true, completion: nil)
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,24 +117,5 @@ final class SingleImageViewController: UIViewController {
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         singleImageView
-    }
-}
-
-struct ContentViewController: UIViewControllerRepresentable {
-
-    typealias UIViewControllerType = SingleImageViewController
-
-    func makeUIViewController(context: Context) -> UIViewControllerType {
-        return SingleImageViewController()
-    }
-
-    func updateUIViewController(_ uiViewController: SingleImageViewController, context: Context) {}
-}
-
-struct ContentViewController_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentViewController()
-            .edgesIgnoringSafeArea(.all)
-            .colorScheme(.light) // or .dark
     }
 }
