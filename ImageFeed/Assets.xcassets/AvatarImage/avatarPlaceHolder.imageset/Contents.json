@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Дизайн без названия-2.png",
+      "filename" : "ehsq.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Дизайн без названия-2@2x.png",
+      "filename" : "ehsq@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Дизайн без названия-2@3x.png",
+      "filename" : "ehsq@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
