@@ -7,8 +7,11 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
+    
+    weak var delegate: ImagesListCellDelegate?
     
     lazy var cellImage: UIImageView = {
         let element = UIImageView()
@@ -27,7 +30,8 @@ final class ImagesListCell: UITableViewCell {
     
     lazy var likeButton: UIButton = {
         let element = UIButton(type: .custom)
-        element.setImage(UIImage(named: "No Active"), for: .normal)
+        element.setImage(Resourses.Images.noActiveLike, for: .normal)
+        element.addTarget(self, action: #selector(likeButtonClicked), for: .touchUpInside)
         return element
     }()
     
@@ -44,7 +48,11 @@ final class ImagesListCell: UITableViewCell {
         contentView.addSubview(likeButton)
         addConstraints()
         setupGradient()
-        
+    }
+    
+    override func prepareForReuse() {
+        gradientImageView.layer.sublayers = nil
+        cellImage.kf.cancelDownloadTask()
     }
     
     func addConstraints() {
@@ -59,14 +67,19 @@ final class ImagesListCell: UITableViewCell {
         }
 
         dateLabel.snp.makeConstraints { make in
-            make.leading.bottom.trailing.equalTo(cellImage).inset(8)
+            make.leading.bottom.equalTo(cellImage).inset(8)
             make.trailing.greaterThanOrEqualTo(cellImage)
+            make.top.equalTo(gradientImageView.snp.top).inset(4)
         }
 
         gradientImageView.snp.makeConstraints { make in
             make.height.equalTo(30)
             make.bottom.trailing.leading.equalTo(cellImage)
         }
+    }
+    
+    @objc private func likeButtonClicked() {
+        delegate?.imageListCellDidTapLike(self)
     }
     
     func setupGradient() {
@@ -83,5 +96,16 @@ final class ImagesListCell: UITableViewCell {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 1)
         gradientImageView.layer.addSublayer(gradient)
+    }
+}
+
+extension ImagesListCell {
+    func setLiked(_ likedByUser: Bool) {
+        let likeImage = likedByUser ? Resourses.Images.activeLike : Resourses.Images.noActiveLike
+        if likedByUser == true {
+            likeButton.setImage(likeImage, for: .normal)
+        } else if likedByUser == false {
+            likeButton.setImage(likeImage, for: .normal)
+        }
     }
 }

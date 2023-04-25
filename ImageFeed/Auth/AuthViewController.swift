@@ -14,7 +14,7 @@ final class AuthViewController: UIViewController {
     
     private lazy var authImage: UIImageView = {
         let element = UIImageView()
-        element.image = UIImage(named: "auth_screen_logo")
+        element.image = Resourses.Images.authScreenLogo
         return element
     }()
     
@@ -34,25 +34,6 @@ final class AuthViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
         addViews()
-        addConstraints()
-    }
-    
-    private func addViews() {
-        view.addSubview(authImage)
-        view.addSubview(sighInButton)
-    }
-    
-    private func addConstraints() {
-        authImage.snp.makeConstraints { make in
-            make.width.height.equalTo(60)
-            make.center.equalTo(view.snp.center)
-        }
-        
-        sighInButton.snp.makeConstraints { make in
-            make.height.equalTo(48)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(90)
-            make.leading.trailing.equalToSuperview().inset(16)
-        }
     }
     
     @objc private func moveToWebView() {
@@ -70,5 +51,26 @@ extension AuthViewController: WebViewViewControllerDelegate {
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+}
+
+extension AuthViewController {
+    private func addViews() {
+        view.addSubview(authImage)
+        view.addSubview(sighInButton)
+        addConstraints()
+    }
+    
+    private func addConstraints() {
+        authImage.snp.makeConstraints { make in
+            make.width.height.equalTo(60)
+            make.center.equalTo(view.snp.center)
+        }
+        
+        sighInButton.snp.makeConstraints { make in
+            make.height.equalTo(48)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(90)
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
     }
 }

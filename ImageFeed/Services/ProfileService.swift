@@ -19,9 +19,7 @@ final class ProfileService {
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
         assert(Thread.isMainThread)
-        if task != nil {
-            return
-        }
+        if task != nil { return }
         
         var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -35,7 +33,6 @@ final class ProfileService {
                                        first_name: unsplashProfile.first_name,
                                        last_name: unsplashProfile.last_name,
                                        bio: bio)
-                UIBlockingProgressHUD.dismiss()
                 completion(.success(self.profile!))
             case .failure(let error):
                 completion(.failure(error))

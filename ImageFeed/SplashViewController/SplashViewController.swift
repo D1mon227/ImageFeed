@@ -13,31 +13,28 @@ final class SplashViewController: UIViewController {
     
     static let didChangeNotification = Notification.Name("ProfileInfoDidRecieve")
     
-    private var isFirst = true
+    var isFirst = true
     private var username: String?
     private let imageListViewController = ImagesListViewController()
     private let oAuthService = OAuth2Service()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    private let imagesListService = ImagesListService.shared
+    private var photosObserver: NSObjectProtocol?
     
     private lazy var logoImage: UIImageView = {
         let element = UIImageView()
-        element.image = UIImage(named: "launch_icon")
+        element.image = Resourses.Images.launch
         return element
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupSplashView()
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        setupSplashView()
         if isFirst {
             if let token = OAuth2TokenStorage().token {
+                imagesListService.fetchPhotosNextPage()
                 fetchProfile(token: token)
-                fetchImageProfile(token: token)
-                switchToTabBarController()
             } else {
                 switchToAuthController()
                 isFirst = false
@@ -45,19 +42,20 @@ final class SplashViewController: UIViewController {
         } else {
             switchToTabBarController()
         }
+        addPhotosObserver()
     }
     
     private func switchToAuthController() {
         let authViewController = AuthViewController()
         authViewController.modalPresentationStyle = .fullScreen
         authViewController.delegate = self
-        present(authViewController, animated: true)
+        present(authViewController, animated: true, completion: nil)
     }
     
     private func switchToTabBarController() {
         let tabBarController = TabBarController()
         tabBarController.modalPresentationStyle = .fullScreen
-        present(tabBarController, animated: true)
+        present(tabBarController, animated: true, completion: nil)
     }
     
     private func fetchOAuthToken(code: String) {
@@ -65,9 +63,10 @@ final class SplashViewController: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let token):
+                OAuth2TokenStorage().token = token
+                self.imagesListService.fetchPhotosNextPage()
                 self.fetchProfile(token: token)
             case .failure(let error):
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert()
                 print("Ошибка получения bearer token \(error)")
             }
@@ -80,15 +79,12 @@ final class SplashViewController: UIViewController {
             switch result {
             case .success(let profile):
                 self.username = profile.username
-                UIBlockingProgressHUD.dismiss()
                 self.fetchImageProfile(token: token)
-                self.switchToTabBarController()
                 NotificationCenter.default.post(
                     name: SplashViewController.didChangeNotification,
                     object: self,
                     userInfo: ["ProfileInfo": profile])
             case .failure(let error):
-                UIBlockingProgressHUD.dismiss()
                 self.showAlert()
                 print(error)
             }
@@ -113,7 +109,17 @@ final class SplashViewController: UIViewController {
         }
     }
     
-    func showAlert() {
+    private func addPhotosObserver() {
+        photosObserver = NotificationCenter.default.addObserver(
+            forName: ImagesListService.didChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.switchToTabBarController()
+            }
+    }
+    
+    private func showAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(",
                                       message: "Не удалось войти в систему",
                                       preferredStyle: .alert)
@@ -121,14 +127,16 @@ final class SplashViewController: UIViewController {
             alert.dismiss(animated: true)
         }
         alert.addAction(action)
-        self.present(alert, animated: true)
+        present(alert, animated: true)
     }
-    
+}
+
+extension SplashViewController {
     private func setupSplashView() {
         view.backgroundColor = .ypBlack
         view.addSubview(logoImage)
         logoImage.snp.makeConstraints { make in
-            make.center.equalTo(view.snp.center)
+            make.center.equalToSuperview()
         }
     }
 }
