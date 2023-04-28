@@ -119,7 +119,8 @@ final class ProfileViewController: UIViewController {
                                       message: "Уверены, что хотите выйти?",
                                       preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "Да",
-                                      style: .default) { _ in
+                                      style: .default) { [weak self] _ in
+            guard let self = self else { return }
             OAuth2TokenStorage().deleteToken()
             self.cleanCookies()
             let splashVC = SplashViewController()

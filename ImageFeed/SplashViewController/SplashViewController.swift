@@ -33,16 +33,16 @@ final class SplashViewController: UIViewController {
         setupSplashView()
         if isFirst {
             if let token = OAuth2TokenStorage().token {
-                imagesListService.fetchPhotosNextPage()
                 fetchProfile(token: token)
             } else {
                 switchToAuthController()
                 isFirst = false
             }
-        } else {
-            switchToTabBarController()
         }
-        addPhotosObserver()
+//        else {
+//            switchToTabBarController()
+//        }
+//        addPhotosObserver()
     }
     
     private func switchToAuthController() {
@@ -63,29 +63,31 @@ final class SplashViewController: UIViewController {
             guard let self = self else { return }
             switch result {
             case .success(let token):
-                OAuth2TokenStorage().token = token
-                self.imagesListService.fetchPhotosNextPage()
                 self.fetchProfile(token: token)
             case .failure(let error):
                 self.showAlert()
+                UIBlockingProgressHUD.dismiss()
                 print("Ошибка получения bearer token \(error)")
             }
         }
     }
     
     private func fetchProfile(token: String) {
-        self.profileService.fetchProfile(token) { [weak self] result in
+        profileService.fetchProfile(token) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success(let profile):
                 self.username = profile.username
                 self.fetchImageProfile(token: token)
+                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
                 NotificationCenter.default.post(
                     name: SplashViewController.didChangeNotification,
                     object: self,
                     userInfo: ["ProfileInfo": profile])
             case .failure(let error):
                 self.showAlert()
+                UIBlockingProgressHUD.dismiss()
                 print(error)
             }
         }
@@ -109,15 +111,15 @@ final class SplashViewController: UIViewController {
         }
     }
     
-    private func addPhotosObserver() {
-        photosObserver = NotificationCenter.default.addObserver(
-            forName: ImagesListService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self = self else { return }
-                self.switchToTabBarController()
-            }
-    }
+//    private func addPhotosObserver() {
+//        photosObserver = NotificationCenter.default.addObserver(
+//            forName: ImagesListService.didChangeNotification,
+//            object: nil,
+//            queue: .main) { [weak self] _ in
+//                guard let self = self else { return }
+//                self.switchToTabBarController()
+//            }
+//    }
     
     private func showAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(",
@@ -143,10 +145,10 @@ extension SplashViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(code: code)
         }
-        UIBlockingProgressHUD.show()
     }
 }

@@ -21,9 +21,7 @@ final class ProfileService {
         assert(Thread.isMainThread)
         if task != nil { return }
         
-        var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
+        let request = makeProfileRequest(token: token)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
@@ -34,11 +32,20 @@ final class ProfileService {
                                        last_name: unsplashProfile.last_name,
                                        bio: bio)
                 completion(.success(self.profile!))
+                self.task = nil
             case .failure(let error):
                 completion(.failure(error))
             }
         }
         self.task = task
         task.resume()
+    }
+}
+
+extension ProfileService {
+    func makeProfileRequest(token: String) -> URLRequest {
+        var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }

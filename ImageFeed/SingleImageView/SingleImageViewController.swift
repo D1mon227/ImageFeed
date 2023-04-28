@@ -95,7 +95,8 @@ final class SingleImageViewController: UIViewController {
                                       message: "Попробовать еще раз?",
                                       preferredStyle: .alert)
         let retryAction = UIAlertAction(title: "Повторить",
-                                        style: .default) { _ in
+                                        style: .default) { [weak self] _ in
+            guard let self = self else { return }
             self.showLargeImage(url: self.imageUrl!)
             alert.dismiss(animated: true)
         }

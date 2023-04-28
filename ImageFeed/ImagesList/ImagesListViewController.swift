@@ -36,6 +36,7 @@ final class ImagesListViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        imagesListService.fetchPhotosNextPage()
         updateTableViewAnimated()
     }
     
@@ -130,7 +131,6 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController {
     private func updateTableViewAnimated() {
-        UIBlockingProgressHUD.dismiss()
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos
@@ -155,11 +155,10 @@ extension ImagesListViewController: ImagesListCellDelegate {
             case .success():
                 self.photos = self.imagesListService.photos
                 cell.setLiked(self.photos[indexPath.row].isLiked)
-                UIBlockingProgressHUD.dismiss()
             case .failure(let error):
                 print(error)
-                UIBlockingProgressHUD.dismiss()
             }
+            UIBlockingProgressHUD.dismiss()
         }
     }
 }

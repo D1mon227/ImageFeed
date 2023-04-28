@@ -15,6 +15,7 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var likeTask: URLSessionTask?
+    private let token = OAuth2TokenStorage().token!
     private(set) var photos: [Photo] = []
     private var lastLoadedPage: Int?
     
@@ -25,9 +26,7 @@ final class ImagesListService {
         
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
-        var request = URLRequest.makeHTTPRequest(path: "/photos/?page=\(nextPage)", httpMethod: "GET")
-        request.setValue("Bearer \(OAuth2TokenStorage().token!)", forHTTPHeaderField: "Authorization")
-        
+        let request = makePhotosRequest(page: nextPage)
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self = self else { return }
             switch result {
@@ -44,7 +43,6 @@ final class ImagesListService {
                                              largeImageURL: fullImage,
                                              isLiked: photo.likedByUser))
                 }
-                UIBlockingProgressHUD.show()
                 NotificationCenter.default.post(
                     name: ImagesListService.didChangeNotification,
                     object: self,
@@ -67,7 +65,7 @@ final class ImagesListService {
         let method = isLike ? "POST" : "DELETE"
         
         var request = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like", httpMethod: method)
-        request.setValue("Bearer \(OAuth2TokenStorage().token!)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeRequest, Error>) in
             guard let self = self else { return }
@@ -94,5 +92,14 @@ final class ImagesListService {
         }
         self.likeTask = task
         task.resume()
+    }
+}
+
+extension ImagesListService {
+    
+    func makePhotosRequest(page: Int) -> URLRequest {
+        var request = URLRequest.makeHTTPRequest(path: "/photos/?page=\(page)", httpMethod: "GET")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return request
     }
 }
