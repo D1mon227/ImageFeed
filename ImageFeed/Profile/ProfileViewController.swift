@@ -12,8 +12,6 @@ import WebKit
 
 final class ProfileViewController: UIViewController {
     
-    private let token = OAuth2TokenStorage().token
-    
     private var profileImageServiceObserver: NSObjectProtocol?
     private var profileInfoServiceObserver: NSObjectProtocol?
     

@@ -39,10 +39,6 @@ final class SplashViewController: UIViewController {
                 isFirst = false
             }
         }
-//        else {
-//            switchToTabBarController()
-//        }
-//        addPhotosObserver()
     }
     
     private func switchToAuthController() {
