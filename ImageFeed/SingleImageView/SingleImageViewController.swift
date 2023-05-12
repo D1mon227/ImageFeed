@@ -12,6 +12,7 @@ import Kingfisher
 final class SingleImageViewController: UIViewController {
     
     var imageUrl: URL?
+    let singleImageView = SingleImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,37 +20,13 @@ final class SingleImageViewController: UIViewController {
         addViews()
         
         showLargeImage(url: imageUrl!)
-        scrollView.delegate = self
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        singleImageView.scrollView.delegate = self
+        singleImageView.scrollView.minimumZoomScale = 0.1
+        singleImageView.scrollView.maximumZoomScale = 1.25
     }
     
-    private lazy var backButton: UIButton = {
-        let element = UIButton(type: .custom)
-        element.setImage(Resourses.Images.backButtonWhite, for: .normal)
-        element.addTarget(self, action: #selector(backToFeed), for: .touchUpInside)
-        return element
-    }()
-
-    private lazy var shareButton: UIButton = {
-        let element = UIButton(type: .custom)
-        element.setImage(Resourses.Images.shareImage, for: .normal)
-        element.addTarget(self, action: #selector(share), for: .touchUpInside)
-        return element
-    }()
-
-    private lazy var scrollView: UIScrollView = {
-        let element = UIScrollView()
-        return element
-    }()
-
-    lazy var singleImageView: UIImageView = {
-        let element = UIImageView()
-        return element
-    }()
-    
     @objc private func share() {
-        guard let shareImage = singleImageView.image else { return }
+        guard let shareImage = singleImageView.singleImageView.image else { return }
         let shareController = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
         present(shareController, animated: true)
     }
@@ -59,26 +36,26 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
-        let minZoomScale = scrollView.minimumZoomScale
-        let maxZoomScale = scrollView.maximumZoomScale
+        let minZoomScale = singleImageView.scrollView.minimumZoomScale
+        let maxZoomScale = singleImageView.scrollView.maximumZoomScale
         view.layoutIfNeeded()
-        let visibleRectSize = scrollView.bounds.size
+        let visibleRectSize = singleImageView.scrollView.bounds.size
         let imageSize = image.size
         let hScale = visibleRectSize.height / imageSize.height
         let wScale = visibleRectSize.width / imageSize.width
         let scale = min(maxZoomScale, max(minZoomScale, max(hScale, wScale)))
-        scrollView.setZoomScale(scale, animated: false)
-        scrollView.layoutIfNeeded()
-        let newContentSize = scrollView.contentSize
+        singleImageView.scrollView.setZoomScale(scale, animated: false)
+        singleImageView.scrollView.layoutIfNeeded()
+        let newContentSize = singleImageView.scrollView.contentSize
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
-        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+        singleImageView.scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
     private func showLargeImage(url: URL) {
         guard isViewLoaded else { return }
         UIBlockingProgressHUD.show()
-        singleImageView.kf.setImage(with: url) { [weak self] result in
+        singleImageView.singleImageView.kf.setImage(with: url) { [weak self] result in
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
@@ -114,32 +91,34 @@ final class SingleImageViewController: UIViewController {
 
 extension SingleImageViewController {
     private func addViews() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(singleImageView)
-        view.addSubview(backButton)
-        view.addSubview(shareButton)
+        view.addSubview(singleImageView.scrollView)
+        singleImageView.scrollView.addSubview(singleImageView.singleImageView)
+        view.addSubview(singleImageView.backButton)
+        view.addSubview(singleImageView.shareButton)
+        singleImageView.backButton.addTarget(self, action: #selector(backToFeed), for: .touchUpInside)
+        singleImageView.shareButton.addTarget(self, action: #selector(share), for: .touchUpInside)
         addConstraints()
     }
 
     private func addConstraints() {
-        scrollView.snp.makeConstraints { make in
+        singleImageView.scrollView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        singleImageView.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.contentLayoutGuide.snp.top)
-            make.bottom.equalTo(scrollView.contentLayoutGuide.snp.bottom)
-            make.leading.equalTo(scrollView.contentLayoutGuide.snp.leading)
-            make.trailing.equalTo(scrollView.contentLayoutGuide.snp.trailing)
+        singleImageView.singleImageView.snp.makeConstraints { make in
+            make.top.equalTo(singleImageView.scrollView.contentLayoutGuide.snp.top)
+            make.bottom.equalTo(singleImageView.scrollView.contentLayoutGuide.snp.bottom)
+            make.leading.equalTo(singleImageView.scrollView.contentLayoutGuide.snp.leading)
+            make.trailing.equalTo(singleImageView.scrollView.contentLayoutGuide.snp.trailing)
         }
         
-        backButton.snp.makeConstraints { make in
+        singleImageView.backButton.snp.makeConstraints { make in
             make.width.height.equalTo(24)
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(9)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(9)
         }
         
-        shareButton.snp.makeConstraints { make in
+        singleImageView.shareButton.snp.makeConstraints { make in
             make.centerX.equalTo(view.snp.centerX)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(36)
         }
@@ -148,7 +127,7 @@ extension SingleImageViewController {
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        singleImageView
+        singleImageView.singleImageView
     }
 }
 

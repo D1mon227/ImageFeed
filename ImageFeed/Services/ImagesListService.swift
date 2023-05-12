@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
@@ -50,6 +50,7 @@ final class ImagesListService {
                     userInfo: ["Photos": self.photos])
                 self.task = nil
                 self.lastLoadedPage = nextPage
+                UIBlockingProgressHUD.dismiss()
             case .failure(_):
                 self.task = nil
             }

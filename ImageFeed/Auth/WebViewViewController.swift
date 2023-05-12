@@ -14,56 +14,48 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     var presenter: WebViewPresenterProtocol?
-    
-    private lazy var webView: WKWebView = {
-        let element = WKWebView()
-        element.backgroundColor = .ypWhite
-        return element
-    }()
-    
-    private lazy var backButton: UIButton = {
-        let element = UIButton(type: .system)
-        element.setImage(Resourses.Images.backButtonBlack, for: .normal)
-        element.tintColor = .ypBlack
-        element.addTarget(self, action: #selector(backButtonAction), for: .touchUpInside)
-        return element
-    }()
-    
-    private lazy var progressView: UIProgressView = {
-        let element = UIProgressView()
-        element.progressTintColor = .ypBlack
-        return element
-    }()
+    private let webView = WebView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         addViews()
-        webView.navigationDelegate = self
+        webView.webView.navigationDelegate = self
         presenter?.viewDidLoad()
         addProgressObserver()
     }
     
     private func addProgressObserver() {
-        estimatedProgressObservation = webView.observe(
+        estimatedProgressObservation = webView.webView.observe(
             \.estimatedProgress,
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                 presenter?.didUpdateProgressValue(webView.estimatedProgress)
+                 presenter?.didUpdateProgressValue(webView.webView.estimatedProgress)
              })
     }
     
     func load(request: URLRequest) {
-        webView.load(request)
+        webView.webView.load(request)
     }
     
     func setProgressValue(_ newValue: Float) {
-        progressView.progress = newValue
+        webView.progressView.progress = newValue
     }
     
     func setProgressHidden(_ isHidden: Bool) {
-        progressView.isHidden = isHidden
+        webView.progressView.isHidden = isHidden
+    }
+    
+    static func cleanCookies() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes,
+                                                        for: [record],
+                                                        completionHandler: {})
+            }
+        }
     }
 
     @objc private func backButtonAction() {
@@ -91,24 +83,25 @@ extension WebViewViewController: WKNavigationDelegate {
 
 extension WebViewViewController {
     private func addViews() {
-        view.addSubview(webView)
-        view.addSubview(backButton)
-        view.addSubview(progressView)
+        view.addSubview(webView.webView)
+        view.addSubview(webView.backButton)
+        view.addSubview(webView.progressView)
+        webView.backButton.addTarget(self, action: #selector(backButtonAction), for: .touchUpInside)
         addConstraints()
     }
     
     private func addConstraints() {
-        webView.snp.makeConstraints { make in
+        webView.webView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
         
-        backButton.snp.makeConstraints { make in
+        webView.backButton.snp.makeConstraints { make in
             make.width.height.equalTo(24)
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(9)
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).inset(9)
         }
         
-        progressView.snp.makeConstraints { make in
+        webView.progressView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(40)
         }

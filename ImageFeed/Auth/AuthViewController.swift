@@ -11,24 +11,7 @@ import SnapKit
 final class AuthViewController: UIViewController {
     
     weak var delegate: AuthViewControllerDelegate?
-    
-    private lazy var authImage: UIImageView = {
-        let element = UIImageView()
-        element.image = Resourses.Images.authScreenLogo
-        return element
-    }()
-    
-    private lazy var sighInButton: UIButton = {
-        let element = UIButton(type: .system)
-        element.backgroundColor = .ypWhite
-        element.setTitle("Войти", for: .normal)
-        element.setTitleColor(.ypBlack, for: .normal)
-        element.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17)
-        element.layer.cornerRadius = 16
-        element.layer.masksToBounds = true
-        element.addTarget(self, action: #selector(moveToWebView), for: .touchUpInside)
-        return element
-    }()
+    private let authView = AuthView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,18 +43,19 @@ extension AuthViewController: WebViewViewControllerDelegate {
 
 extension AuthViewController {
     private func addViews() {
-        view.addSubview(authImage)
-        view.addSubview(sighInButton)
+        view.addSubview(authView.authImage)
+        view.addSubview(authView.sighInButton)
+        authView.sighInButton.addTarget(self, action: #selector(moveToWebView), for: .touchUpInside)
         addConstraints()
     }
     
     private func addConstraints() {
-        authImage.snp.makeConstraints { make in
+        authView.authImage.snp.makeConstraints { make in
             make.width.height.equalTo(60)
             make.center.equalTo(view.snp.center)
         }
         
-        sighInButton.snp.makeConstraints { make in
+        authView.sighInButton.snp.makeConstraints { make in
             make.height.equalTo(48)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(90)
             make.leading.trailing.equalToSuperview().inset(16)
