@@ -12,7 +12,8 @@ import ProgressHUD
 
 final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     
-    var photos: [Photo] = []
+    
+    //var photos: [Photo] = []
     var presenter: ImagesListPresenterProtocol?
     private var photosServiceObserver: NSObjectProtocol?
     private let imagesListView = ImagesListView()
@@ -129,14 +130,16 @@ extension ImagesListViewController {
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = imagesListView.tableView.indexPath(for: cell),
-              let photos = presenter?.imagesListService?.photos else { return }
-        let photo = photos[indexPath.row]
+              let presenter = presenter else { return }
+        let photo = presenter.photos[indexPath.row]
         UIBlockingProgressHUD.show()
-        presenter?.imagesListService?.changeLike(photoId: photo.id, isLike: !photo.isLiked) { result in
+        presenter.imagesListService?.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self = self,
+                  let imagesListService = presenter.imagesListService else { return }
             switch result {
             case .success():
-                self.photos = photos
-                cell.setLiked(self.photos[indexPath.row].isLiked)
+                presenter.photos = imagesListService.photos
+                cell.setLiked(presenter.photos[indexPath.row].isLiked)
             case .failure(let error):
                 print(error)
                 self.presenter?.showAlert(vc: self)

@@ -8,12 +8,11 @@
 import UIKit
 import Kingfisher
 import SnapKit
-import WebKit
 
 final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
+    let profileView = ProfileView()
     private let profileImageService = ProfileImageService.shared
-    private let profileView = ProfileView()
     var presenter: ProfileViewPresenterProtocol?
     
     override func viewDidLoad() {

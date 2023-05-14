@@ -5,7 +5,7 @@
 //  Created by Dmitry Medvedev on 05.05.2023.
 //
 
-import Foundation
+import UIKit
 
 protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfileViewPresenterProtocol? { get set }

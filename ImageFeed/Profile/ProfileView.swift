@@ -18,7 +18,6 @@ final class ProfileView {
     
     lazy var nameLabel: UILabel = {
         let element = UILabel()
-        element.text = "Екатерина Новикова"
         element.textColor = .ypWhite
         element.font = UIFont.boldSystemFont(ofSize: 23)
         return element
@@ -26,7 +25,6 @@ final class ProfileView {
     
     lazy var loginNameLabel: UILabel = {
         let element = UILabel()
-        element.text = "@ekaterina_nov"
         element.textColor = .ypGray
         element.font = UIFont.systemFont(ofSize: 13)
         return element
@@ -34,7 +32,6 @@ final class ProfileView {
     
     lazy var descriptionLabel: UILabel = {
         let element = UILabel()
-        element.text = "Hello, World!"
         element.textColor = .ypWhite
         element.font = UIFont.systemFont(ofSize: 13)
         return element

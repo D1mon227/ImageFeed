@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ImagesListPresenterProtocol {
+protocol ImagesListPresenterProtocol: AnyObject {
     var photos: [Photo] { get set }
     var view: ImagesListViewControllerProtocol? { get set }
     var imagesListService: ImagesListServiceProtocol? { get set }
