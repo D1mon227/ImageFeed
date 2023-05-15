@@ -12,19 +12,24 @@ import ProgressHUD
 
 final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     
-    
-    //var photos: [Photo] = []
     var presenter: ImagesListPresenterProtocol?
     private var photosServiceObserver: NSObjectProtocol?
-    private let imagesListView = ImagesListView()
+    
+    private lazy var tableView: UITableView = {
+        let element = UITableView()
+        element.backgroundColor = .ypBlack
+        element.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        element.register(ImagesListCell.self, forCellReuseIdentifier: "ImagesListCell")
+        return element
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(imagesListView.tableView)
+        view.addSubview(tableView)
         addConstraints()
         
-        imagesListView.tableView.delegate = self
-        imagesListView.tableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
         presenter?.photosObserver()
     }
     
@@ -35,9 +40,26 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     }
     
     private func addConstraints() {
-        imagesListView.tableView.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.top.bottom.leading.trailing.equalToSuperview()
         }
+    }
+    
+    private func requestFullSizeImage(viewController: SingleImageViewController, url: URL) {
+        UIBlockingProgressHUD.show()
+        viewController.singleImageView.kf.setImage(
+            with: url) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let imageResult):
+                        UIBlockingProgressHUD.dismiss()
+                        viewController.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                    case .failure(_:):
+                        UIBlockingProgressHUD.dismiss()
+                        viewController.showErrorAlert()
+                    }
+                }
+            }
     }
     
     func switchToSingleViewController(sender: Any?) {
@@ -46,10 +68,8 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
               let photoURL = presenter?.photos[indexPath.row].largeImageURL else { return }
 
         if let url = URL(string: photoURL) {
-            singleImageViewController.imageUrl = url
-            singleImageViewController.singleImageView.singleImageView.kf.indicatorType = .activity
+            requestFullSizeImage(viewController: singleImageViewController, url: url)
         }
-        singleImageViewController.singleImageView.singleImageView.kf.indicatorType = .none
         singleImageViewController.modalPresentationStyle = .fullScreen
         present(singleImageViewController, animated: true)
     }
@@ -118,18 +138,18 @@ extension ImagesListViewController: UITableViewDataSource {
 
 extension ImagesListViewController {
     func updateTableViewAnimated(oldCount: Int, newCount: Int) {
-        imagesListView.tableView.performBatchUpdates {
+        tableView.performBatchUpdates {
             let indexPaths = (oldCount..<newCount).map { i in
                 IndexPath(row: i, section: 0)
             }
-            imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
+            tableView.insertRows(at: indexPaths, with: .automatic)
         } completion: { _ in }
     }
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
-        guard let indexPath = imagesListView.tableView.indexPath(for: cell),
+        guard let indexPath = tableView.indexPath(for: cell),
               let presenter = presenter else { return }
         let photo = presenter.photos[indexPath.row]
         UIBlockingProgressHUD.show()
