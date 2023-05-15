@@ -11,30 +11,23 @@ import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     
-    var imageUrl: URL?
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .ypBlack
-        addViews()
-        
-        showLargeImage(url: imageUrl!)
-        scrollView.delegate = self
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+    var image: UIImage! {
+        didSet {
+            guard isViewLoaded else { return }
+            image = singleImageView.image
+        }
     }
     
     private lazy var backButton: UIButton = {
         let element = UIButton(type: .custom)
         element.setImage(Resourses.Images.backButtonWhite, for: .normal)
-        element.addTarget(self, action: #selector(backToFeed), for: .touchUpInside)
+        element.accessibilityIdentifier = "BackButton"
         return element
     }()
 
     private lazy var shareButton: UIButton = {
         let element = UIButton(type: .custom)
         element.setImage(Resourses.Images.shareImage, for: .normal)
-        element.addTarget(self, action: #selector(share), for: .touchUpInside)
         return element
     }()
 
@@ -48,6 +41,17 @@ final class SingleImageViewController: UIViewController {
         return element
     }()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        addViews()
+        
+        rescaleAndCenterImageInScrollView(image: singleImageView.image)
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
+    }
+    
     @objc private func share() {
         guard let shareImage = singleImageView.image else { return }
         let shareController = UIActivityViewController(activityItems: [shareImage], applicationActivities: nil)
@@ -58,7 +62,8 @@ final class SingleImageViewController: UIViewController {
         dismiss(animated: true)
     }
     
-    private func rescaleAndCenterImageInScrollView(image: UIImage) {
+    func rescaleAndCenterImageInScrollView(image: UIImage?) {
+        guard let image = image else { return }
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
         view.layoutIfNeeded()
@@ -75,37 +80,15 @@ final class SingleImageViewController: UIViewController {
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
     
-    private func showLargeImage(url: URL) {
-        guard isViewLoaded else { return }
-        UIBlockingProgressHUD.show()
-        singleImageView.kf.setImage(with: url) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
-            guard let self = self else { return }
-            switch result {
-            case .success(let imageResult):
-                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
-            case .failure(_):
-                self.showErrorAlert()
-            }
-        }
-    }
-    
-    private func showErrorAlert() {
+    func showErrorAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так.",
-                                      message: "Попробовать еще раз?",
+                                      message: "Попробуйте еще раз",
                                       preferredStyle: .alert)
-        let retryAction = UIAlertAction(title: "Повторить",
-                                        style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.showLargeImage(url: self.imageUrl!)
-            alert.dismiss(animated: true)
-        }
-        let cancelAction = UIAlertAction(title: "Не надо",
-                                         style: .default) { _ in
+        let retryAction = UIAlertAction(title: "Ок",
+                                        style: .default) { _ in
             alert.dismiss(animated: true)
         }
         alert.addAction(retryAction)
-        alert.addAction(cancelAction)
         present(alert, animated: true)
     }
     
@@ -118,6 +101,8 @@ extension SingleImageViewController {
         scrollView.addSubview(singleImageView)
         view.addSubview(backButton)
         view.addSubview(shareButton)
+        backButton.addTarget(self, action: #selector(backToFeed), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(share), for: .touchUpInside)
         addConstraints()
     }
 

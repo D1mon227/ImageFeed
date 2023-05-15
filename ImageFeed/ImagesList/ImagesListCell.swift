@@ -32,6 +32,7 @@ final class ImagesListCell: UITableViewCell {
         let element = UIButton(type: .custom)
         element.setImage(Resourses.Images.noActiveLike, for: .normal)
         element.addTarget(self, action: #selector(likeButtonClicked), for: .touchUpInside)
+        element.accessibilityIdentifier = "LikeButton"
         return element
     }()
     

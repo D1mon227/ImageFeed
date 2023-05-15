@@ -16,7 +16,16 @@ final class TabBarController: UITabBarController {
 
     private func setupTabBar() {
         let imagesListViewController = ImagesListViewController()
+        let imagesListPresenter = ImagesListPresenter()
+        let imagesListService = ImagesListService()
         let profileViewController = ProfileViewController()
+        let profileViewPresenter = ProfileViewPresenter()
+        
+        imagesListPresenter.view = imagesListViewController
+        imagesListPresenter.imagesListService = imagesListService
+        imagesListViewController.presenter = imagesListPresenter
+        profileViewController.presenter = profileViewPresenter
+        profileViewPresenter.view = profileViewController
 
         profileViewController.tabBarItem = UITabBarItem(
             title: nil,
