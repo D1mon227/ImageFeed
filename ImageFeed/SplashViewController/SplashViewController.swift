@@ -15,7 +15,6 @@ final class SplashViewController: UIViewController {
     
     var isFirst = true
     private var username: String?
-    //private let splashView = SplashView()
     private let imageListViewController = ImagesListViewController()
     private let oAuthService = OAuth2Service()
     private let profileService = ProfileService.shared
