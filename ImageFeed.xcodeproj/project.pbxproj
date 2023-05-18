@@ -29,7 +29,6 @@
 		7374C47429E04A67008DC71A /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 7374C47329E04A67008DC71A /* SwiftKeychainWrapper */; };
 		7374C47629E04EF9008DC71A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7374C47529E04EF9008DC71A /* TabBarController.swift */; };
 		7377D37E2A0AF2ED00233A16 /* ImageFeedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377D37D2A0AF2ED00233A16 /* ImageFeedUITests.swift */; };
-		7377D3892A0AF73B00233A16 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377D3882A0AF73B00233A16 /* SplashView.swift */; };
 		7377D38D2A0AFA4E00233A16 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377D38C2A0AFA4E00233A16 /* ProfileView.swift */; };
 		7377D3912A0AFBB000233A16 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7377D3902A0AFBB000233A16 /* WebView.swift */; };
 		738126A029DF2291005EBFBE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7381269F29DF2291005EBFBE /* Kingfisher */; };
@@ -117,7 +116,6 @@
 		7374C47529E04EF9008DC71A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		7377D37B2A0AF2ED00233A16 /* ImageFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7377D37D2A0AF2ED00233A16 /* ImageFeedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFeedUITests.swift; sourceTree = "<group>"; };
-		7377D3882A0AF73B00233A16 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		7377D38C2A0AFA4E00233A16 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		7377D3902A0AFBB000233A16 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		739C248E29F2BEA200F5A6A5 /* PhotoLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLike.swift; sourceTree = "<group>"; };
@@ -259,7 +257,6 @@
 		7341189A29D0B740003C76CD /* SplashViewController */ = {
 			isa = PBXGroup;
 			children = (
-				7377D3882A0AF73B00233A16 /* SplashView.swift */,
 				7341189529D092ED003C76CD /* SplashViewController.swift */,
 			);
 			path = SplashViewController;
@@ -624,7 +621,6 @@
 			files = (
 				7345104229F2D8C400E2A7FF /* Array+Extensions.swift in Sources */,
 				7349F29329ED4C6B00770606 /* Photo.swift in Sources */,
-				7377D3892A0AF73B00233A16 /* SplashView.swift in Sources */,
 				73DB4E39299FA85B0023E362 /* ImagesListViewController.swift in Sources */,
 				73B31E722A04610700BC93A5 /* ProfileViewPresenterProtocol.swift in Sources */,
 				73B31E812A05635300BC93A5 /* ImagesListViewControllerProtocol.swift in Sources */,

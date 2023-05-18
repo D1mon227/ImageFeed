@@ -15,11 +15,17 @@ final class SplashViewController: UIViewController {
     
     var isFirst = true
     private var username: String?
-    private let splashView = SplashView()
+    //private let splashView = SplashView()
     private let imageListViewController = ImagesListViewController()
     private let oAuthService = OAuth2Service()
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
+    
+    private lazy var logoImage: UIImageView = {
+        let element = UIImageView()
+        element.image = Resourses.Images.launch
+        return element
+    }()
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -115,8 +121,8 @@ final class SplashViewController: UIViewController {
 extension SplashViewController {
     private func setupSplashView() {
         view.backgroundColor = .ypBlack
-        view.addSubview(splashView.logoImage)
-        splashView.logoImage.snp.makeConstraints { make in
+        view.addSubview(logoImage)
+        logoImage.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
     }
